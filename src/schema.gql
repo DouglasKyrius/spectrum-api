@@ -1,0 +1,63 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateUserInput {
+  """name"""
+  displayName: String!
+
+  """email"""
+  email: String!
+
+  """password"""
+  password: String!
+
+  """username"""
+  username: String!
+}
+
+input ListUsersInput {
+  """classical limit"""
+  limit: Float!
+
+  """classical offset"""
+  offset: Float!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  removeUser(_id: String!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Query {
+  user(_id: String!): User!
+  users(listUsersInput: ListUsersInput!): [User!]!
+}
+
+input UpdateUserInput {
+  """name"""
+  displayName: String
+
+  """email"""
+  email: String
+  id: String!
+
+  """password"""
+  password: String
+
+  """username"""
+  username: String
+}
+
+type User {
+  """Name"""
+  displayName: String!
+
+  """User email """
+  email: String!
+  id: String!
+
+  """Username"""
+  username: String!
+}

@@ -6,4 +6,4 @@ services:
     ports:
       - '27017:27017'
     volumes:
-      - .docker-data/mongo:/data/coopers-db
+      - .docker-data/mongo:/data/spectrum-db
