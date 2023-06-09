@@ -24,15 +24,43 @@ input ListUsersInput {
   offset: Float!
 }
 
+type LoggedUserResponse {
+  access_token: String!
+}
+
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   removeUser(_id: String!): User!
+  signIn(signInInput: SignInInput!): LoggedUserResponse!
+  signUp(signUpInput: SignUpInput!): LoggedUserResponse!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type Query {
   user(_id: String!): User!
   users(listUsersInput: ListUsersInput!): [User!]!
+}
+
+input SignInInput {
+  """email of the user"""
+  email: String!
+
+  """password of the user"""
+  password: String!
+}
+
+input SignUpInput {
+  """name"""
+  displayName: String!
+
+  """email"""
+  email: String!
+
+  """password"""
+  password: String!
+
+  """username"""
+  username: String
 }
 
 input UpdateUserInput {
@@ -54,7 +82,7 @@ type User {
   """Name"""
   displayName: String!
 
-  """User email """
+  """User email"""
   email: String!
   id: String!
 

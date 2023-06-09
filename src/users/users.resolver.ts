@@ -4,6 +4,9 @@ import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ListUsersInput } from './dto/list-users.input';
+import { UseGuards, UseInterceptors } from '@nestjs/common';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { OnlySameUserByIdAllowed } from '@/common/interceptors/users.interceptor';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -24,6 +27,8 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(OnlySameUserByIdAllowed)
   @Mutation(() => User)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
     return this.usersService.update(updateUserInput.id, updateUserInput);
