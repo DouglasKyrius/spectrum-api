@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import {
   BadRequestException,
@@ -10,6 +10,8 @@ import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ListUsersInput } from './dto/list-users.input';
+import { GoogleProfile } from './dto/google-profile';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -29,7 +31,12 @@ export class UsersService {
     const saltOrRounds = 10;
     const password = createUserInput.password;
     createUserInput.password = await bcrypt.hash(password, saltOrRounds);
-    const user = await new this.userModel(createUserInput).save();
+    const randomUsername = randomUUID();
+    const user = await new this.userModel({
+      username: randomUsername,
+      provider: 'database',
+      ...createUserInput,
+    }).save();
 
     return user;
   }
@@ -39,7 +46,7 @@ export class UsersService {
     return this.userModel.find().skip(offset).limit(limit).exec();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string | ObjectId) {
     const user = await this.userModel.findOne({ _id: id }).exec();
     if (!user) {
       throw new NotFoundException(`User ${id} not found`);
@@ -73,8 +80,35 @@ export class UsersService {
   async validateUser(email: string, password: string) {
     const user = await this.findOneByEmail(email);
     if (user) {
+      if (user.provider === 'google' && !user.password)
+        throw new BadRequestException('This is a Google account');
+
       if (await bcrypt.compare(password, user.password)) return user;
     }
     return null;
+  }
+
+  async validateOAuthUser(profile: GoogleProfile) {
+    const user = await this.userModel.findOne({ email: profile.email }).exec();
+    if (user) {
+      if (user.provider === 'database') {
+        return await this.userModel
+          .findOneAndUpdate(
+            { _id: user.id },
+            { $set: { provider: 'google', ...profile } },
+            { new: true },
+          )
+          .exec();
+      }
+      return user;
+    }
+
+    const randomUsername = randomUUID();
+    const newUser = await new this.userModel({
+      username: randomUsername,
+      provider: 'google',
+      ...profile,
+    }).save();
+    return newUser;
   }
 }

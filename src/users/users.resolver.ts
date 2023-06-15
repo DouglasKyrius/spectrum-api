@@ -5,7 +5,7 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ListUsersInput } from './dto/list-users.input';
 import { UseGuards, UseInterceptors } from '@nestjs/common';
-import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@/auth/guards';
 import { OnlySameUserByIdAllowed } from '@/common/interceptors/users.interceptor';
 
 @Resolver(() => User)

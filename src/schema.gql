@@ -85,6 +85,8 @@ type User {
   """User email"""
   email: String!
   id: String!
+  picture: String!
+  provider: String!
 
   """Username"""
   username: String!

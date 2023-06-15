@@ -1,7 +1,6 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { randomUUID } from 'crypto';
 
 @Schema()
 @ObjectType()
@@ -17,9 +16,17 @@ export class User {
   @Field(() => String, { description: 'User email' })
   email: string;
 
-  @Prop({ default: randomUUID(), unique: true })
+  @Prop({ unique: true })
   @Field(() => String, { description: 'Username' })
   username: string;
+
+  @Prop()
+  @Field(() => String)
+  picture: string;
+
+  @Prop()
+  @Field(() => String)
+  provider: string;
 
   @Prop()
   password: string;

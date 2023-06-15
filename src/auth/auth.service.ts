@@ -18,6 +18,7 @@ export class AuthService {
       email: user.email,
       username: user.username,
       displayName: user.displayName,
+      picture: user.picture,
     };
 
     return {
@@ -33,6 +34,10 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException('Invalid password');
     }
+    return this.generateUserCredentials(user);
+  }
+
+  signInOAuthUser(user: any) {
     return this.generateUserCredentials(user);
   }
 
