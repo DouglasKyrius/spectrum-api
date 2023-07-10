@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const configService = new ConfigService();
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.use(
     session({
       secret: configService.get('JWT_SECRET'),

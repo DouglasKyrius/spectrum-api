@@ -16,6 +16,16 @@ input CreateUserInput {
   username: String!
 }
 
+input ExternalLinks {
+  href: String!
+  socialNetwork: String!
+}
+
+type ExternalLinksGQL {
+  href: String!
+  socialNetwork: String!
+}
+
 input ListUsersInput {
   """classical limit"""
   limit: Float!
@@ -64,30 +74,40 @@ input SignUpInput {
 }
 
 input UpdateUserInput {
+  bio: String
+
   """name"""
   displayName: String
 
   """email"""
   email: String
+  externalLinks: [ExternalLinks!]
   id: String!
+  location: String
 
   """password"""
   password: String
+  picture: String
+  provider: String
+  techs: [String!]
+  title: String
 
   """username"""
   username: String
+  verifiedAccount: Boolean
 }
 
 type User {
-  """Name"""
+  bio: String!
   displayName: String!
-
-  """User email"""
   email: String!
+  externalLinks: [ExternalLinksGQL!]!
   id: String!
+  location: String!
   picture: String!
   provider: String!
-
-  """Username"""
+  techs: [String!]!
+  title: String!
   username: String!
+  verifiedAccount: Boolean!
 }

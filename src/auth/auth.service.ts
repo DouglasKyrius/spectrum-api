@@ -19,6 +19,12 @@ export class AuthService {
       username: user.username,
       displayName: user.displayName,
       picture: user.picture,
+      title: user.title,
+      verifiedAccount: user.verifiedAccount,
+      techs: user.techs,
+      bio: user.bio,
+      location: user.location,
+      externalLinks: user.externalLinks,
     };
 
     return {
